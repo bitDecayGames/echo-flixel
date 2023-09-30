@@ -29,7 +29,7 @@ import openfl.display.BitmapData;
 
 class FlxEcho extends FlxBasic
 {
-	public static var camera:FlxCamera = null;
+	public static var drawCamera:FlxCamera = null;
 
 	/**
 	 * Gets the FlxEcho instance, which contains the current Echo World. May be Null if `FlxEcho.init` has not been called.
@@ -412,9 +412,9 @@ class FlxEcho extends FlxBasic
 		if (!draw_debug || debug_drawer == null || world == null) return;
 
 		// TODO - draw with full FlxG.cameras list
-		if (camera != null) {
-			debug_drawer.camera.set_from_min_max(camera.scroll.x, camera.scroll.y, camera.scroll.x + camera.width,
-				camera.scroll.y + camera.height);
+		if (drawCamera != null) {
+			debug_drawer.camera.set_from_min_max(drawCamera.scroll.x, drawCamera.scroll.y, drawCamera.scroll.x + drawCamera.width,
+				drawCamera.scroll.y + drawCamera.height);
 		} else {
 			debug_drawer.camera.set_from_min_max(FlxG.camera.scroll.x, FlxG.camera.scroll.y, FlxG.camera.scroll.x + FlxG.camera.width,
 				FlxG.camera.scroll.y + FlxG.camera.height);
@@ -426,8 +426,14 @@ class FlxEcho extends FlxBasic
 		var s = debug_drawer.canvas;
 		s.x = s.y = 0;
 		s.scaleX = s.scaleY = 1;
-		s.rotation = FlxG.camera.angle;
-		FlxG.camera.transformObject(s);
+
+		if (drawCamera != null) {
+			s.rotation = drawCamera.angle;
+			drawCamera.transformObject(s);
+		} else {
+			s.rotation = FlxG.camera.angle;
+			FlxG.camera.transformObject(s);
+		}
 	}
 	#end
 

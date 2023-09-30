@@ -13,6 +13,7 @@ import flixel.FlxG;
 import flixel.FlxObject.*;
 import flixel.FlxObject;
 import flixel.FlxSprite;
+import flixel.FlxCamera;
 import flixel.group.FlxGroup;
 import flixel.util.FlxColor;
 
@@ -28,6 +29,8 @@ import openfl.display.BitmapData;
 
 class FlxEcho extends FlxBasic
 {
+	public static var camera:FlxCamera = null;
+
 	/**
 	 * Gets the FlxEcho instance, which contains the current Echo World. May be Null if `FlxEcho.init` has not been called.
 	 */
@@ -409,8 +412,13 @@ class FlxEcho extends FlxBasic
 		if (!draw_debug || debug_drawer == null || world == null) return;
 
 		// TODO - draw with full FlxG.cameras list
-		debug_drawer.camera.set_from_min_max(FlxG.camera.scroll.x, FlxG.camera.scroll.y, FlxG.camera.scroll.x + FlxG.camera.width,
-			FlxG.camera.scroll.y + FlxG.camera.height);
+		if (camera != null) {
+			debug_drawer.camera.set_from_min_max(camera.scroll.x, camera.scroll.y, camera.scroll.x + camera.width,
+				camera.scroll.y + camera.height);
+		} else {
+			debug_drawer.camera.set_from_min_max(FlxG.camera.scroll.x, FlxG.camera.scroll.y, FlxG.camera.scroll.x + FlxG.camera.width,
+				FlxG.camera.scroll.y + FlxG.camera.height);
+		}
 
 		debug_drawer.draw(world, false);
 		debug_drawer.draw_verlet(verlet);
